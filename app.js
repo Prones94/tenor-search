@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3000
 
+app.use(express.static('public'));
+
 // Libraries
 const Tenor = require("tenorjs").client({
   "Key": "GU8W2OSB2NSD",
