@@ -2,11 +2,22 @@ const express = require('express');
 const app = express();
 const port = 3000
 
+// Libraries
+const Tenor = require("tenorjs").client({
+  "Key": "GU8W2OSB2NSD",
+  "Filter": "off",
+  "Locale": "en_US",
+});
 
 // Routes
 app.get('/', (req, res) => {
-  console.log(req.query) ;
-  res.render('home');
+ term = ""
+ if(req.query.term) term = req.query.term;
+ Tenor.Search.Query(term, "5")
+  .then(response => {
+    const gifs = response;
+    res.render('home', {gifs})
+  }).catch(console.error);
 });
 
 app.get('/greetings/:name', (req, res) => {
@@ -16,6 +27,8 @@ app.get('/greetings/:name', (req, res) => {
 
 // Middleware
 const exphbs = require('express-handlebars');
+
+
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
